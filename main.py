@@ -9,7 +9,7 @@ app = Flask(_name_)
 # แสดง JSON ตามลำดับที่เขียนไว้ใน Dictionary
 app.json.sort_keys = False
 
-WORK_FACTOR = 2_000_00 ##---------##
+WORK_FACTOR = 200_000 ##---------##
 PASSWORD_LENGTH = 10
 SALT_SIZE_BYTES = 16
 
