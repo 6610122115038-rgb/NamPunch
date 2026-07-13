@@ -5,7 +5,7 @@ import secrets
 import string
 import time
 
-app = Flask(_name_)
+app = Flask(__name__)
 # แสดง JSON ตามลำดับที่เขียนไว้ใน Dictionary
 app.json.sort_keys = False
 
@@ -82,7 +82,7 @@ def login_check():
     })
 
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=8080,
