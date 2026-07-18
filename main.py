@@ -19,7 +19,7 @@ limiter = Limiter(
     storage_uri="memory://" # เก็บข้อมูลการจำลองโหลดไว้ใน Memory ของ Server
 )
 
-WORK_FACTOR = 5000 
+WORK_FACTOR = 2000000 
 PASSWORD_LENGTH = 10
 SALT_SIZE_BYTES = 16
 
