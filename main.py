@@ -1,4 +1,7 @@
 from flask import Flask, jsonify
+# 1. Import Limiter และ get_remote_address จาก flask_limiter
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import hashlib
 import hmac
 import secrets
@@ -6,17 +9,23 @@ import string
 import time
 
 app = Flask(__name__)
-# แสดง JSON ตามลำดับที่เขียนไว้ใน Dictionary
 app.json.sort_keys = False
 
-WORK_FACTOR = 2000000 ##---------##
+# 2. สร้าง Instance ของ Limiter โดยใช้ IP Address (get_remote_address) เป็น Key
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=[], # ไม่ตั้งค่า global limit เพื่อให้มีผลเฉพาะจุดที่กำหนด
+    storage_uri="memory://" # เก็บข้อมูลการจำลองโหลดไว้ใน Memory ของ Server
+)
+
+WORK_FACTOR = 2000000 
 PASSWORD_LENGTH = 10
 SALT_SIZE_BYTES = 16
 
 
 def generate_random_password(length: int) -> str:
     characters = string.ascii_letters + string.digits
-
     return "".join(
         secrets.choice(characters)
         for _ in range(length)
@@ -40,7 +49,9 @@ def home():
     return "Server is running..."
 
 
+# 3. กำหนดนโยบาย Rate Limiting ให้เข้าถึงได้ไม่เกิน 5 Requests ต่อวินาที เฉพาะ Endpoint นี้
 @app.route("/login-check")
+@limiter.limit("5 per second")
 def login_check():
     start_time = time.perf_counter()
 
